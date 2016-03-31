@@ -11,7 +11,8 @@ Note: due to the nature of this script (irreversible deletion), tread accordingl
 * Code is fully available for scrutiny/review
 
 ## To Use
-Install Tamper Monkey (Chrome) or Greasemonkey (Firefox). Then install the userscript from Greasy Fork: https://greasyfork.org/en/scripts/18408-andrew-s-facebook-cleaner
+1. Install Tamper Monkey (Chrome) or Greasemonkey (Firefox). Then install the userscript from Greasy Fork: https://greasyfork.org/en/scripts/18408-andrew-s-facebook-cleaner
+2. Log into Facebook, then go to your Activity Log. You should see two buttons at the top of the page.
 
 ## License
 * You are free to do whatever you want with the code
