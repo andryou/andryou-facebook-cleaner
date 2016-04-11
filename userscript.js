@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity*
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1
+// @version			1.1
 // @description		Purge and/or Hide all your activity on Facebook to date.
 // ==/UserScript==
 
@@ -20,10 +20,12 @@ var firstrun = false;
 var retry = 0;
 var retries = 10;
 var activityheight = 0;
+var mindays = 0;
+var now = Math.round((new Date()).getTime() / 1000);
 
 // Inject buttons into page
 $(document).ready(function() {
-    $('#pagelet_main_column_personal div [class="_2o3t fixed_elem"] div[class="clearfix uiHeaderTop"]').append('<h3>Andrew\'s Facebook Cleaner</h3><input type="button" id="andrewfbdelete" value="Purge All">&nbsp;<input type="button" id="andrewfbhide" value="Hide All"> Note: if doing both, Purge before Hiding.');
+    $('#pagelet_main_column_personal div [class="_2o3t fixed_elem"] div[class="clearfix uiHeaderTop"]').append('<h3>Andrew\'s Facebook Cleaner</h3><input type="button" id="andrewfbdelete" value="Purge">&nbsp;<input type="button" id="andrewfbhide" value="Hide"> &nbsp; Limit to activity older than <input id="andrewfbmin" type="number" min="0" step="1" value="7" style="width: 30px"> days (0 = all)<br />Note: if purging <em>and</em> hiding, purge before hiding.');
     $('#andrewfbdelete').click(triggerpurge);
     $('#andrewfbhide').click(triggerhide);
 });
@@ -44,6 +46,7 @@ function triggerpurge() {
 		inited = false;
 		firstrun = false;
 		retry = 0;
+		mindays = 60 * 60 * 24 * parseInt($('#andrewfbmin').val());
 		andrewhandler('purge');
 	}
 }
@@ -52,6 +55,7 @@ function triggerhide() {
 		inited = false;
 		firstrun = false;
 		retry = 0;
+		mindays = 60 * 60 * 24 * parseInt($('#andrewfbmin').val());
 		andrewhandler('hide');
 	}
 }
@@ -97,28 +101,44 @@ function andrewhandler(mode) {
 				console.log('Seems to be done. '+retry+'/'+retries);
 			} else {
 				retry = 0;
-				if (mode == 'hide') hideiconclick();
-				else if (mode == 'purge') {
-					contents = $("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").text();
-					if (contents.indexOf(fbname+' likes an article.') != -1 || contents.indexOf(fbname+' took a photo ') != -1 || contents.indexOf(fbname+' was with ') != -1 || contents.indexOf(fbname+' was at ') != -1 || contents.indexOf(fbname+' was in ') != -1 || contents.indexOf(fbname+' took a video ') != -1 || contents.indexOf(fbname+' shared ') != -1 || contents.indexOf(fbname+' updated his status') != -1 || contents.indexOf(fbname+' updated her status') != -1 || contents.indexOf(fbname+' updated their status') != -1 || contents.indexOf(fbname+' commented on ') != -1 || contents.indexOf(fbname+' wrote on ') != -1 || contents.indexOf(' to your Timeline.') != -1 || contents.indexOf(' to '+fbname+'\'s Timeline.') != -1 || contents.indexOf(' to '+fbname+'\'s timeline.') != -1 || contents.indexOf(fbname+' added a new photo') != -1) {
-						currentmode = 'delete';
-						purgeiconclick();
-					} else if (contents.indexOf(fbname+' likes ') != -1) {
-						currentmode = 'unlike';
-						purgeiconclick();
-					} else if (contents.indexOf(fbname+' voted on ') != -1) {
-						currentmode = 'unvote';
-						purgeiconclick();
-					} else if (contents.indexOf(fbname+' was mentioned in a ') != -1) {
-						currentmode = 'mention';
-						purgeiconclick();
-					} else if (contents.indexOf(fbname+' was tagged ') != -1) {
-						currentmode = 'tag';
-						purgeiconclick();
+				delpost = false;
+				if (mindays == 0) delpost = true;
+				else {
+					posttime = $("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first a._39g5").text();
+					posttime = Date.parse(posttime.replace(/[ap]m$/i, '')); // Date() does not like am/pm; don't worry about hours/minutes, just that the event took place on the day
+					then = Math.round(new Date(posttime).getTime() / 1000);
+					if ((now - then) > mindays) {
+						delpost = true;
 					} else {
-						//console.log('> Not a relevant activity, skipping.');
+						// activity is still a padawan, so let's let it live... until next time, *mwahaha*
 						$("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").addClass('fbprocessed_'+mode);
 						andrewhandler(mode);
+					}
+				}
+				if (delpost) {
+					if (mode == 'hide') hideiconclick();
+					else if (mode == 'purge') {
+						contents = $("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").text();
+						if (contents.indexOf(fbname+' likes an article.') != -1 || contents.indexOf(fbname+' took a photo ') != -1 || contents.indexOf(fbname+' was with ') != -1 || contents.indexOf(fbname+' was at ') != -1 || contents.indexOf(fbname+' was in ') != -1 || contents.indexOf(fbname+' took a video ') != -1 || contents.indexOf(fbname+' shared ') != -1 || contents.indexOf(fbname+' updated his status') != -1 || contents.indexOf(fbname+' updated her status') != -1 || contents.indexOf(fbname+' updated their status') != -1 || contents.indexOf(fbname+' commented on ') != -1 || contents.indexOf(fbname+' wrote on ') != -1 || contents.indexOf(' to your Timeline.') != -1 || contents.indexOf(' to '+fbname+'\'s Timeline.') != -1 || contents.indexOf(' to '+fbname+'\'s timeline.') != -1 || contents.indexOf(fbname+' added a new photo') != -1) {
+							currentmode = 'delete';
+							purgeiconclick();
+						} else if (contents.indexOf(fbname+' likes ') != -1) {
+							currentmode = 'unlike';
+							purgeiconclick();
+						} else if (contents.indexOf(fbname+' voted on ') != -1) {
+							currentmode = 'unvote';
+							purgeiconclick();
+						} else if (contents.indexOf(fbname+' was mentioned in a ') != -1) {
+							currentmode = 'mention';
+							purgeiconclick();
+						} else if (contents.indexOf(fbname+' was tagged ') != -1) {
+							currentmode = 'tag';
+							purgeiconclick();
+						} else {
+							//console.log('> Not a relevant activity, skipping.');
+							$("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").addClass('fbprocessed_'+mode);
+							andrewhandler(mode);
+						}
 					}
 				}
 			}
