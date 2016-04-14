@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity*
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.1
+// @version			1.2
 // @description		Purge and/or Hide all your activity on Facebook to date.
 // ==/UserScript==
 
@@ -25,7 +25,7 @@ var now = Math.round((new Date()).getTime() / 1000);
 
 // Inject buttons into page
 $(document).ready(function() {
-    $('#pagelet_main_column_personal div [class="_2o3t fixed_elem"] div[class="clearfix uiHeaderTop"]').append('<h3>Andrew\'s Facebook Cleaner</h3><input type="button" id="andrewfbdelete" value="Purge">&nbsp;<input type="button" id="andrewfbhide" value="Hide"> &nbsp; Limit to activity older than <input id="andrewfbmin" type="number" min="0" step="1" value="7" style="width: 30px"> days (0 = all)<br />Note: if purging <em>and</em> hiding, purge before hiding.');
+    $('#pagelet_main_column_personal div [class="_2o3t fixed_elem"] div[class="clearfix uiHeaderTop"]').append('<h3>Andrew\'s Facebook Cleaner</h3><input type="button" id="andrewfbdelete" value="Purge">&nbsp;<input type="button" id="andrewfbhide" value="Hide"> &nbsp; Limit to activity older than <input id="andrewfbmin" type="number" min="0" step="1" value="7" style="width: 30px"> days (0 = all)<br />Note: if purging <em>and</em> hiding, purge before hiding.<style>.fbprocessed_generic { background-color: #9AFF9A; }</style>');
     $('#andrewfbdelete').click(triggerpurge);
     $('#andrewfbhide').click(triggerhide);
 });
@@ -111,7 +111,7 @@ function andrewhandler(mode) {
 						delpost = true;
 					} else {
 						// activity is still a padawan, so let's let it live... until next time, *mwahaha*
-						$("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").addClass('fbprocessed_'+mode);
+						$("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").addClass('fbprocessed_generic fbprocessed_'+mode);
 						andrewhandler(mode);
 					}
 				}
@@ -136,7 +136,7 @@ function andrewhandler(mode) {
 							purgeiconclick();
 						} else {
 							//console.log('> Not a relevant activity, skipping.');
-							$("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").addClass('fbprocessed_'+mode);
+							$("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").addClass('fbprocessed_generic fbprocessed_'+mode);
 							andrewhandler(mode);
 						}
 					}
@@ -163,11 +163,11 @@ function hideclickhandler() {
     if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() != 'Hidden from Timeline' && !$("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
         $("div.uiLayer:visible span._54nh:contains('Hidden from Timeline')")[0].click();
         console.log('> Hid post from timeline.');
-        $("#fbTimelineLogBody div._5shk:not(.fbprocessed_hide):first").addClass('fbprocessed_hide');
+        $("#fbTimelineLogBody div._5shk:not(.fbprocessed_hide):first").addClass('fbprocessed_generic fbprocessed_hide');
         andrewhandler('hide');
     } else if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() == 'Hidden from Timeline' && $("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
         $("div.uiLayer:visible span._54nh:contains('Unmark as Spam')")[0].click();
-        $("#fbTimelineLogBody div._5shk:not(.fbprocessed_hide):first").addClass('fbprocessed_hide');
+        $("#fbTimelineLogBody div._5shk:not(.fbprocessed_hide):first").addClass('fbprocessed_generic fbprocessed_hide');
         console.log('> Unmarking as spam.');
         setTimeout(hidecloseoverlay, 2000);
     } else if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() != 'Hidden from Timeline' && $("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
@@ -175,7 +175,7 @@ function hideclickhandler() {
         console.log('> Hid post from timeline, and unmarking it as spam.');
         hideiconclick();
     } else {
-        $("#fbTimelineLogBody div._5shk:not(.fbprocessed_hide):first").addClass('fbprocessed_hide');
+        $("#fbTimelineLogBody div._5shk:not(.fbprocessed_hide):first").addClass('fbprocessed_generic fbprocessed_hide');
         console.log('> Post not hidable or already processed. Continuing.');
         andrewhandler('hide');
     }
@@ -201,7 +201,7 @@ function purgeselect() {
     else if (currentmode == 'unvote') word = 'Unvote';
     else if (currentmode == 'unlike') word = 'Unlike';
     else word = 'Report/Remove Tag';
-	$("#fbTimelineLogBody div._5shk:not(.fbprocessed_purge):first").addClass('fbprocessed_purge');
+	$("#fbTimelineLogBody div._5shk:not(.fbprocessed_purge):first").addClass('fbprocessed_generic fbprocessed_purge');
     if ($("div.uiLayer:visible span._54nh:contains('"+word+"')").length) {
         $("div.uiLayer:visible span._54nh:contains('"+word+"')").click();
         if (currentmode == 'delete') setTimeout(purgeconfirm, 500);
