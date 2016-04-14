@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity*
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.2
+// @version			1.3
 // @description		Purge and/or Hide all your activity on Facebook to date.
 // ==/UserScript==
 
@@ -47,6 +47,7 @@ function triggerpurge() {
 		firstrun = false;
 		retry = 0;
 		mindays = 60 * 60 * 24 * parseInt($('#andrewfbmin').val());
+		$('.fbprocessed_generic').removeClass('fbprocessed_generic');
 		andrewhandler('purge');
 	}
 }
@@ -56,6 +57,7 @@ function triggerhide() {
 		firstrun = false;
 		retry = 0;
 		mindays = 60 * 60 * 24 * parseInt($('#andrewfbmin').val());
+		$('.fbprocessed_generic').removeClass('fbprocessed_generic');
 		andrewhandler('hide');
 	}
 }
