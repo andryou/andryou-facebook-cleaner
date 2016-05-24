@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity*
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.3
+// @version			1.4
 // @description		Purge and/or Hide all your activity on Facebook to date.
 // ==/UserScript==
 
@@ -121,10 +121,10 @@ function andrewhandler(mode) {
 					if (mode == 'hide') hideiconclick();
 					else if (mode == 'purge') {
 						contents = $("#fbTimelineLogBody div._5shk:not(.fbprocessed_"+mode+"):first").text();
-						if (contents.indexOf(fbname+' likes an article.') != -1 || contents.indexOf(fbname+' took a photo ') != -1 || contents.indexOf(fbname+' was with ') != -1 || contents.indexOf(fbname+' was at ') != -1 || contents.indexOf(fbname+' was in ') != -1 || contents.indexOf(fbname+' took a video ') != -1 || contents.indexOf(fbname+' shared ') != -1 || contents.indexOf(fbname+' updated his status') != -1 || contents.indexOf(fbname+' updated her status') != -1 || contents.indexOf(fbname+' updated their status') != -1 || contents.indexOf(fbname+' commented on ') != -1 || contents.indexOf(fbname+' wrote on ') != -1 || contents.indexOf(' to your Timeline.') != -1 || contents.indexOf(' to '+fbname+'\'s Timeline.') != -1 || contents.indexOf(' to '+fbname+'\'s timeline.') != -1 || contents.indexOf(fbname+' added a new photo') != -1) {
+						if (contents.indexOf(fbname+' likes an article.') != -1 || contents.indexOf(fbname+' took a photo ') != -1 || contents.indexOf(fbname+' was with ') != -1 || contents.indexOf(fbname+' was at ') != -1 || contents.indexOf(fbname+' was in ') != -1 || contents.indexOf(fbname+' took a video ') != -1 || contents.indexOf(fbname+' shared ') != -1 || contents.indexOf(fbname+' updated his status') != -1 || contents.indexOf(fbname+' updated her status') != -1 || contents.indexOf(fbname+' updated their status') != -1 || contents.indexOf(fbname+' commented on ') != -1 || contents.indexOf(fbname+' wrote on ') != -1 || contents.indexOf(' to your Timeline.') != -1 || contents.indexOf(' to '+fbname+'\'s Timeline.') != -1 || contents.indexOf(' to '+fbname+'\'s timeline.') != -1 || contents.indexOf(fbname+' added a new photo') != -1 || contents.indexOf(fbname+' was untagged in ') != -1 || contents.indexOf(fbname+' posted in ') != -1 || contents.indexOf(fbname+' replied to ') != -1 || ) {
 							currentmode = 'delete';
 							purgeiconclick();
-						} else if (contents.indexOf(fbname+' likes ') != -1) {
+						} else if (contents.indexOf(fbname+' likes ') != -1 || contents.indexOf(fbname+' reacted to ') != -1) {
 							currentmode = 'unlike';
 							purgeiconclick();
 						} else if (contents.indexOf(fbname+' voted on ') != -1) {
