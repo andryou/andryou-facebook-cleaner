@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity*
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.4
+// @version			1.4.1
 // @description		Purge and/or Hide all your activity on Facebook to date.
 // ==/UserScript==
 
