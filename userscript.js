@@ -162,18 +162,18 @@ function hideiconclick() {
     setTimeout(hideclickhandler, 500);
 }
 function hideclickhandler() {
-    if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() != 'Hidden from Timeline' && !$("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
-        $("div.uiLayer:visible span._54nh:contains('Hidden from Timeline')")[0].click();
+    if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() != 'Hidden from timeline' && !$("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
+        $("div.uiLayer:visible span._54nh:contains('Hidden from timeline')")[0].click();
         console.log('> Hid post from timeline.');
         $("#fbTimelineLogBody div._5shk:not(.fbprocessed_hide):first").addClass('fbprocessed_generic fbprocessed_hide');
         andrewhandler('hide');
-    } else if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() == 'Hidden from Timeline' && $("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
+    } else if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() == 'Hidden from timeline' && $("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
         $("div.uiLayer:visible span._54nh:contains('Unmark as Spam')")[0].click();
         $("#fbTimelineLogBody div._5shk:not(.fbprocessed_hide):first").addClass('fbprocessed_generic fbprocessed_hide');
         console.log('> Unmarking as spam.');
         setTimeout(hidecloseoverlay, 2000);
-    } else if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() != 'Hidden from Timeline' && $("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
-        $("div.uiLayer:visible span._54nh:contains('Hidden from Timeline')")[0].click();
+    } else if ($("div.uiLayer:visible li._54ni._54nd").length && $("div.uiLayer:visible li._54ni._54nd").text() != 'Hidden from timeline' && $("div.uiLayer:visible span._54nh:contains('Unmark as Spam')").length) {
+        $("div.uiLayer:visible span._54nh:contains('Hidden from timeline')")[0].click();
         console.log('> Hid post from timeline, and unmarking it as spam.');
         hideiconclick();
     } else {
